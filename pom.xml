@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.9.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.luxoft.training.java.spring</groupId>
+	<artifactId>java8-spring</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>java8-spring</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>11</java.version>
+
+		<java-hamcrest.version>2.0.0.0</java-hamcrest.version>
+	</properties>
+
+	<dependencyManagement>
+	  <dependencies>
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<scope>provided</scope>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>${h2.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!--region Test dependency management (JUnit-Jupiter, AssertJ, Hamcrest, Mockito, JUnit-Vintage)-->
+			<dependency>
+			  <groupId>org.junit.jupiter</groupId>
+			  <artifactId>junit-jupiter-params</artifactId>
+			  <version>${junit-jupiter.version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<dependency>
+			  <groupId>org.hamcrest</groupId>
+			  <artifactId>java-hamcrest</artifactId>
+			  <version>${java-hamcrest.version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<dependency>
+			  <groupId>org.junit.vintage</groupId>
+			  <artifactId>junit-vintage-engine</artifactId>
+			  <version>${junit-jupiter.version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<dependency>
+			  <groupId>org.junit.jupiter</groupId>
+			  <artifactId>junit-jupiter-engine</artifactId>
+			  <version>${junit-jupiter.version}</version>
+			  <scope>test</scope>
+			</dependency>
+			<!--endregion-->
+
+	  </dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!--region Test dependencies - JUnit Jupiter, AssertJ, Hamcrest, Mockito -->
+		<dependency>
+		  <groupId>org.junit.jupiter</groupId>
+		  <artifactId>junit-jupiter-params</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>org.assertj</groupId>
+		  <artifactId>assertj-core</artifactId>
+		  <scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.hamcrest</groupId>
+		  <artifactId>java-hamcrest</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>org.mockito</groupId>
+		  <artifactId>mockito-junit-jupiter</artifactId>
+		  <scope>test</scope>
+		</dependency>
+		<!--<dependency>-->
+		<!--  <groupId>org.junit.vintage</groupId>-->
+		<!--  <artifactId>junit-vintage-engine</artifactId>-->
+		<!--</dependency>-->
+		<dependency>
+		  <groupId>org.junit.jupiter</groupId>
+		  <artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<!--endregion-->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
