@@ -1,8 +1,7 @@
 package com.luxoft.j8airport.flights;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -11,108 +10,99 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+@SpringBootTest
 
-@RunWith(JUnit4.class)
-public class TimezoneUtilsTests
-{
-    @Test
-    public void getTimeZonesStartedWithTest1()
-    {
-        String filter = "Europe";
+public class TimezoneUtilsTests {
 
-        List<String> timeZones = TimezoneUtils.getTimeZonesStartedWith(filter);
+  @Test
+  public void getTimeZonesStartedWithTest1() {
+    String filter = "Europe";
 
-        assertTrue("--> list should contains timezones in Europe",
-                timeZones.size() > 0);
-    }
+    List<String> timeZones = TimezoneUtils.getTimeZonesStartedWith(filter);
 
-    @Test
-    public void getTimeZonesStartedWithTest2()
-    {
-        String filter = "Europe";
+    assertTrue("--> list should contains timezones in Europe",
+        timeZones.size() > 0);
+  }
 
-        List<String> timeZones = TimezoneUtils.getTimeZonesStartedWith(filter);
+  @Test
+  public void getTimeZonesStartedWithTest2() {
+    String filter = "Europe";
 
-        List<String> filteredTimeZones = timeZones
-                .stream()
-                .filter(zone -> zone.startsWith(filter))
-                .collect(Collectors.toList());
+    List<String> timeZones = TimezoneUtils.getTimeZonesStartedWith(filter);
 
-        assertEquals("--> list should contains only timezones that starts with Europe",
-                filteredTimeZones.size(), timeZones.size());
-    }
+    List<String> filteredTimeZones = timeZones
+                                         .stream()
+                                         .filter(zone -> zone.startsWith(filter))
+                                         .collect(Collectors.toList());
 
-    @Test
-    public void getAllEuropeTimeZonesTest1()
-    {
-        List<String> timeZones = TimezoneUtils.getAllEuropeTimeZones();
+    assertEquals("--> list should contains only timezones that starts with Europe",
+        filteredTimeZones.size(), timeZones.size());
+  }
 
-        List<String> filteredTimeZones = timeZones
-                .stream()
-                .filter(zone -> zone.startsWith("Europe"))
-                .collect(Collectors.toList());
+  @Test
+  public void getAllEuropeTimeZonesTest1() {
+    List<String> timeZones = TimezoneUtils.getAllEuropeTimeZones();
 
-        assertEquals("--> list should contains only timezones that starts with Europe",
-                filteredTimeZones.size(), timeZones.size());
-    }
+    List<String> filteredTimeZones = timeZones.stream()
+                                         .filter(zone -> zone.startsWith("Europe"))
+                                         .collect(Collectors.toList());
 
-    @Test
-    public void getAllEuropeTimeZonesTest2()
-    {
-        List<String> timeZones = TimezoneUtils.getAllEuropeTimeZones();
+    assertEquals("--> list should contains only timezones that starts with Europe",
+        filteredTimeZones.size(), timeZones.size());
+  }
 
-        int expectedSize = ZoneId.getAvailableZoneIds()
-                .stream()
-                .filter(s -> s.startsWith("Europe"))
-                .collect(Collectors.toList()).size();
+  @Test
+  public void getAllEuropeTimeZonesTest2() {
+    List<String> timeZones = TimezoneUtils.getAllEuropeTimeZones();
 
-        assertEquals("--> list should contains " + expectedSize + " time zones for Europe",
-                expectedSize, timeZones.size());
-    }
+    int expectedSize = ZoneId.getAvailableZoneIds().stream()
+                           .filter(s -> s.startsWith("Europe"))
+                           .collect(Collectors.toList()).size();
 
-    @Test
-    public void datePlusDurationTest1()
-    {
-        ZonedDateTime source = ZonedDateTime
-                .now(ZoneId.of("Europe/Amsterdam"))
-                .withHour(10)
-                .withMinute(0)
-                .withSecond(0);
+    assertEquals("--> list should contains " + expectedSize + " time zones for Europe",
+        expectedSize, timeZones.size());
+  }
+
+  @Test
+  public void datePlusDurationTest1() {
+    ZonedDateTime source = ZonedDateTime
+                               .now(ZoneId.of("Europe/Amsterdam"))
+                               .withHour(10)
+                               .withMinute(0)
+                               .withSecond(0);
 
 
-        ZonedDateTime target = TimezoneUtils
-                .datePlusDuration(source, Duration.ofMinutes(60),"Europe/Dublin");
+    ZonedDateTime target = TimezoneUtils
+                               .datePlusDuration(source, Duration.ofMinutes(60), "Europe/Dublin");
 
-        assertEquals("--> time should be equal because Dublin -1 to Amsterdam", source.getHour(), target.getHour());
-    }
+    assertEquals("--> time should be equal because Dublin -1 to Amsterdam", source.getHour(), target.getHour());
+  }
 
-    @Test
-    public void datePlusDurationTest2()
-    {
-        ZonedDateTime source = ZonedDateTime
-                .now(ZoneId.of("Europe/Amsterdam"))
-                .withHour(10)
-                .withMinute(0)
-                .withSecond(0);
+  @Test
+  public void datePlusDurationTest2() {
+    ZonedDateTime source = ZonedDateTime
+                               .now(ZoneId.of("Europe/Amsterdam"))
+                               .withHour(10)
+                               .withMinute(0)
+                               .withSecond(0);
 
 
-        ZonedDateTime target = TimezoneUtils
-                .datePlusDuration(source, Duration.ofMinutes(60),"Europe/Athens");
+    ZonedDateTime target = TimezoneUtils
+                               .datePlusDuration(source, Duration.ofMinutes(60), "Europe/Athens");
 
-        assertEquals("--> time should be equal because Athens +1 to Amsterdam", source.getHour() + 2, target.getHour());
-    }
+    assertEquals("--> time should be equal because Athens +1 to Amsterdam", source.getHour() + 2, target.getHour());
+  }
 
-    @Test
-    public void sortedZoneIdToTimeTest()
-    {
-        String expected = "Europe/Amsterdam : " + ZonedDateTime.now(ZoneId.of("Europe/Amsterdam"))
-                .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
+  @Test
+  public void sortedZoneIdToTimeTest() {
+    String expected = "Europe/Amsterdam : " + ZonedDateTime.now(ZoneId.of("Europe/Amsterdam"))
+                                                  .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM));
 
-        String actual = TimezoneUtils.sortedZoneIdToTime("Europe").get(0);
+    String actual = TimezoneUtils.sortedZoneIdToTime("Europe").get(0);
 
-        assertEquals(expected, actual);
-    }
+    assertEquals("must equals", expected, actual);
+  }
 }

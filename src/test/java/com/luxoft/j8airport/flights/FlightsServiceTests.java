@@ -7,41 +7,38 @@ import com.luxoft.j8airport.domain.Status;
 import com.luxoft.j8airport.domain.Flight;
 import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.tickets.TicketRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FlightsServiceTests
 {
 
-    @Autowired
-    private FlightService flightService;
+    final FlightService flightService;
 
-    @Autowired
-    private ClientService clientService;
+    final ClientService clientService;
 
-    @Autowired
-    private ClientSupportService clientSupportService;
+    final ClientSupportService clientSupportService;
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    final TicketRepository ticketRepository;
 
-    private Flight flight;
+    Flight flight;
 
-    @Before
+    @BeforeEach
     public void setupFlight()
     {
         System.out.println("setupFlight --> ");
@@ -68,7 +65,7 @@ public class FlightsServiceTests
         flight = flightService.findById(flightId);
     }
 
-    @After
+    @AfterEach
     public void cleanDB()
     {
 
