@@ -1,99 +1,38 @@
 package com.luxoft.j8airport.domain;
 
-import javax.persistence.*;
 import java.time.Duration;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Data
 @Entity
-@Table
-public class FlightCard
-{
-    @Id
-    @GeneratedValue
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+public class FlightCard {
 
-    @ManyToOne
-    private Airport from;
+  @Id
+  @GeneratedValue
+  Long id;
 
-    @ManyToOne
-    private Airport to;
+  @ManyToOne
+  Airport from;
 
-    @Column
-    private int distance;
+  @ManyToOne
+  private Airport to;
 
-    @Column
-    private Duration flightTime;
+  int distance;
 
-    @Column
-    private int maxPassengers;
+  Duration flightTime;
 
-    public FlightCard()
-    {
-    }
+  int maxPassengers;
 
-    public Long getId()
-    {
-        return id;
-    }
 
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public Airport getFrom()
-    {
-        return from;
-    }
-
-    public void setFrom(Airport from)
-    {
-        this.from = from;
-    }
-
-    public Airport getTo()
-    {
-        return to;
-    }
-
-    public void setTo(Airport to)
-    {
-        this.to = to;
-    }
-
-    public int getDistance()
-    {
-        return distance;
-    }
-
-    public void setDistance(int distance)
-    {
-        this.distance = distance;
-    }
-
-    public String getFlightTime()
-    {
-        return String.valueOf(flightTime.toMinutes());
-    }
-
-    public Duration getFlightTimeObj()
-    {
-        return flightTime;
-    }
-
-    public void setFlightTime(Duration flightTime)
-    {
-        this.flightTime = flightTime;
-    }
-
-    public int getMaxPassengers()
-    {
-        return maxPassengers;
-    }
-
-    public void setMaxPassengers(int maxPassengers)
-    {
-        this.maxPassengers = maxPassengers;
-    }
 }
 

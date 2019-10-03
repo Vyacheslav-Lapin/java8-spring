@@ -11,24 +11,20 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class J8airportApplication {
 
-	public static void main(String[] args)
-	{
-		SpringApplication.run(J8airportApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(J8airportApplication.class, args);
+  }
 
-    @Bean
-    ClientSupportService clientSupportService()
-    {
-        return new ClientSupportService();
-    }
+  //  @Bean
+  //  ClientSupportService clientSupportService() {
+  //    return new ClientSupportService();
+  //  }
 
-    @Bean
-    CommandLineRunner init(ClientSupportService clientSupportService, FlightService flightService)
-    {
-        return env ->
-        {
-            clientSupportService.generateAndStoreClient("Oleg", 34, Client.Gender.MALE);
-            flightService.loadFlights();
-        };
-    }
+  @Bean
+  CommandLineRunner init(ClientSupportService clientSupportService, FlightService flightService) {
+    return env -> {
+      clientSupportService.generateAndStoreClient("Oleg", 34, Client.Gender.MALE);
+      flightService.loadFlights();
+    };
+  }
 }
