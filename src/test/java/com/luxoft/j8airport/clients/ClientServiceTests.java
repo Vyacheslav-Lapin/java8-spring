@@ -25,9 +25,9 @@ public class ClientServiceTests {
   private static final int SILVER_COUNT = 2;
   private static final int NONE_COUNT = 6;
 
-  final ClientService clientService;
+  ClientService clientService;
 
-  final ClientSupportService clientSupportService;
+  ClientSupportService clientSupportService;
 
   @BeforeEach
   public void setup() {

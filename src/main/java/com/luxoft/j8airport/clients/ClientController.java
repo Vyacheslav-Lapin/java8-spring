@@ -2,20 +2,20 @@ package com.luxoft.j8airport.clients;
 
 import com.luxoft.j8airport.domain.Client;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/clients")
 public class ClientController {
 
-  @Autowired
   ClientService clientService;
 
   @GetMapping
-  List<Client> findAll() {
+  public List<Client> findAll() {
     return clientService.findAll();
   }
 

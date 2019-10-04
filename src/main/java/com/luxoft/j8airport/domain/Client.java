@@ -14,14 +14,11 @@ public class Client {
   long id;
 
   String name;
-
   int age;
-
   Gender gender;
-
   Status status = Status.NONE;
 
   public enum Gender {
-    MALE, FEMALE;
+    MALE, FEMALE
   }
 }

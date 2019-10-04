@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FlightCardRepository extends JpaRepository<FlightCard, Long>
-{
+public interface FlightCardRepository extends JpaRepository<FlightCard, Long> {
 
 }

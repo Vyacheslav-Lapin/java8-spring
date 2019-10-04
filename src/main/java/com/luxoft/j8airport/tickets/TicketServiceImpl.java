@@ -1,62 +1,56 @@
 package com.luxoft.j8airport.tickets;
 
 import com.luxoft.j8airport.domain.Client;
-import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.domain.Flight;
+import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.tickets.discounts.DiscountService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
-public class TicketServiceImpl implements TicketService
-{
-    @Autowired
-    private DiscountService discountService;
+@RequiredArgsConstructor
+public class TicketServiceImpl implements TicketService {
 
-    private TicketRepository repository;
+  DiscountService discountService;
 
-    @Override
-    public Ticket calculateAndApplyDiscount(Ticket ticket)
-    {
-        return null;
-    }
+  @NonFinal
+  @Setter(onMethod_ = @Autowired)
+  TicketRepository repository;
 
-    @Override
-    public Ticket createTicket(Client client, Flight flight)
-    {
-        return null;
-    }
+  @Override
+  public Ticket calculateAndApplyDiscount(Ticket ticket) {
+    return null;
+  }
 
-    @Override
-    public Double getAverageMoneySpent()
-    {
+  @Override
+  public Ticket createTicket(Client client, Flight flight) {
+    return null;
+  }
 
-        return null;
-    }
+  @Override
+  public Double getAverageMoneySpent() {
 
-    @Override
-    public Set<Client> getAllAboveAverageSpenders()
-    {
-        return null;
-    }
+    return null;
+  }
 
-    private Map<Client, Double> getClientToSpending()
-    {
-        return null;
-    }
+  @Override
+  public Set<Client> getAllAboveAverageSpenders() {
+    return null;
+  }
+
+  private Map<Client, Double> getClientToSpending() {
+    return null;
+  }
 
 
-    @Override
-    public Set<Client> getAllClientsAbove(int flightLimit)
-    {
-        return null;
-    }
+  @Override
+  public Set<Client> getAllClientsAbove(int flightLimit) {
+    return null;
+  }
 
-    @Autowired
-    public void setRepository(TicketRepository repository)
-    {
-        this.repository = repository;
-    }
 }

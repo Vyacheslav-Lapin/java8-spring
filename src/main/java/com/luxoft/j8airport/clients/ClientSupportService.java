@@ -5,18 +5,18 @@ import com.luxoft.j8airport.domain.Status;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ClientSupportService {
-  public static final String DEFAULT_CLIENT_NAME_PREFIX = "CLONE_";
 
+  public static final String DEFAULT_CLIENT_NAME_PREFIX = "CLONE_";
   public static final int DEFAULT_AGE = 21;
 
   private static int counter = 0;
 
-  @Autowired
   ClientRepository repository;
 
   @Transactional
@@ -33,8 +33,10 @@ public class ClientSupportService {
     List<Client> clients = new ArrayList<>(count);
 
     for (int i = 0; i < count; i++) {
-      Client client = generateClient(DEFAULT_CLIENT_NAME_PREFIX + counter++,
-          DEFAULT_AGE, (i % 2 == 0 ? Client.Gender.MALE : Client.Gender.FEMALE));
+      Client client = generateClient(
+          DEFAULT_CLIENT_NAME_PREFIX + counter++,
+          DEFAULT_AGE,
+          (i % 2 == 0 ? Client.Gender.MALE : Client.Gender.FEMALE));
 
       client.setStatus(status);
 

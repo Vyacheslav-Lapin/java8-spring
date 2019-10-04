@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
+@With
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,14 +27,10 @@ public class FlightCard {
   Airport from;
 
   @ManyToOne
-  private Airport to;
+  Airport to;
 
   int distance;
-
   Duration flightTime;
-
   int maxPassengers;
-
-
 }
 

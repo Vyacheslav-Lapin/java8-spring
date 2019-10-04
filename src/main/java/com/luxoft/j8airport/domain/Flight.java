@@ -1,121 +1,64 @@
 package com.luxoft.j8airport.domain;
 
-import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@Data
 @Entity
-@Table
-public class Flight
-{
-    @Id
-    @GeneratedValue
-    private Long id;
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Flight {
 
-    @ManyToOne
-    private FlightCard flightCard;
+  @Id
+  @GeneratedValue
+  Long id;
 
-    @Column
-    private ZonedDateTime departure;
+  @NonNull
+  @ManyToOne
+  FlightCard flightCard;
 
-    @Column
-    private ZonedDateTime arrive;
+  ZonedDateTime departure;
+  ZonedDateTime arrive;
 
-    @Column
-    private State state = State.NONE;
+  State state = State.NONE;
 
-    @OneToMany
-    @JoinColumn(name = "FK_FLIGHT_ID")
-    private List<Ticket> ticketsBought;
+  @OneToMany
+  @JoinColumn(name = "FK_FLIGHT_ID")
+  List<Ticket> ticketsBought = new ArrayList<>();
 
-    public Flight() {}
+  public void addTicket(Ticket ticket) {
+    ticketsBought.add(ticket);
+  }
 
-    public Flight(FlightCard flightCard)
-    {
-        this.flightCard = flightCard;
-        this.ticketsBought = new ArrayList<>(this.flightCard.getMaxPassengers());
-    }
+  public Flight startBoarding() {
+    state = State.BOARDING;
+    return this;
+  }
 
-    public void addTicket(Ticket ticket)
-    {
-        ticketsBought.add(ticket);
-    }
+  public void takeOff() {
+    state = State.IN_THE_SKY;
+  }
 
-    public Flight startBoarding()
-    {
-        state = State.BOARDING;
+  public List<Ticket> getTicketsBought() {
+    return new ArrayList<>(ticketsBought);
+  }
 
-        return this;
-    }
+  public void setTicketsBought(List<Ticket> ticketsBought) {
+    this.ticketsBought = new ArrayList<>(ticketsBought);
+  }
 
-    public void takeOff()
-    {
-        state = State.IN_THE_SKY;
-    }
-
-    public enum State
-    {
-        NONE, BOARDING, IN_THE_SKY, LANDED;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
-
-    public FlightCard getFlightCard()
-    {
-        return flightCard;
-    }
-
-    public void setFlightCard(FlightCard flightCard)
-    {
-        this.flightCard = flightCard;
-    }
-
-    public ZonedDateTime getDeparture()
-    {
-        return departure;
-    }
-
-    public void setDeparture(ZonedDateTime departure)
-    {
-        this.departure = departure;
-    }
-
-    public ZonedDateTime getArrive()
-    {
-        return arrive;
-    }
-
-    public void setArrive(ZonedDateTime arrive)
-    {
-        this.arrive = arrive;
-    }
-
-    public State getState()
-    {
-        return state;
-    }
-
-    public void setState(State state)
-    {
-        this.state = state;
-    }
-
-    public List<Ticket> getTicketsBought()
-    {
-        return new ArrayList<>(ticketsBought);
-    }
-
-    public void setTicketsBought(List<Ticket> ticketsBought)
-    {
-        this.ticketsBought = new ArrayList<>(ticketsBought);
-    }
+  public enum State {
+    NONE, BOARDING, IN_THE_SKY, LANDED
+  }
 }

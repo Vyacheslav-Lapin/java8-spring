@@ -16,30 +16,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
-  private Map<Long, Flight> waitingForClients = new ConcurrentHashMap<>(10);
 
-  @Autowired
+  Map<Long, Flight> waitingForClients = new ConcurrentHashMap<>(10);
+
   TicketRepository ticketRepository;
 
-  @Autowired
   FlightRepository flightRepository;
 
-  @Autowired
   AirportRepository airportRepository;
 
-  @Autowired
   FlightCardRepository flightCardRepository;
 
-  @Autowired
   TicketService ticketService;
 
-  @Autowired
   ClientService clientService;
 
   @Override
@@ -189,7 +185,9 @@ public class FlightServiceImpl implements FlightService {
 
     val flightCard2 = flightCardRepository.save(
         flightCard.toBuilder()
-            .maxPassengers(255).build());
+            .maxPassengers(255)
+            .id(null)
+            .build());
 
     setUpFlight(ka);
     setUpFlight(ak);

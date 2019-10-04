@@ -1,236 +1,219 @@
 package com.luxoft.j8airport.flights;
 
-import com.luxoft.j8airport.domain.Client;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotNull;
+import static org.springframework.test.util.AssertionErrors.assertTrue;
+
 import com.luxoft.j8airport.clients.ClientService;
 import com.luxoft.j8airport.clients.ClientSupportService;
-import com.luxoft.j8airport.domain.Status;
+import com.luxoft.j8airport.domain.Client;
 import com.luxoft.j8airport.domain.Flight;
+import com.luxoft.j8airport.domain.Status;
 import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.tickets.TicketRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.NonFinal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static org.springframework.test.util.AssertionErrors.assertNotNull;
-import static org.springframework.test.util.AssertionErrors.assertTrue;
-
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class FlightsServiceTests
-{
+public class FlightsServiceTests {
 
-    final FlightService flightService;
+  FlightService flightService;
 
-    final ClientService clientService;
+  ClientService clientService;
 
-    final ClientSupportService clientSupportService;
+  ClientSupportService clientSupportService;
 
-    final TicketRepository ticketRepository;
+  TicketRepository ticketRepository;
 
-    Flight flight;
+  @NonFinal
+  Flight flight;
 
-    @BeforeEach
-    public void setupFlight()
-    {
-        System.out.println("setupFlight --> ");
+  @BeforeEach
+  public void setupFlight() {
+    System.out.println("setupFlight --> ");
 
-        Long flightId = flightService.getAllAvailableFlights().get(1).getId();
+    Long flightId = flightService.getAllAvailableFlights().get(1).getId();
 
-        List<Client> platinumClients = clientSupportService.generateAndStoreClients(Status.PLATINUM, 1);
-        List<Client> goldClients = clientSupportService.generateAndStoreClients(Status.GOLD, 3);
-        List<Client> silverClients = clientSupportService.generateAndStoreClients(Status.SILVER, 2);
-        List<Client> noneClients = clientSupportService.generateAndStoreClients(Status.NONE, 6);
+    List<Client> platinumClients = clientSupportService.generateAndStoreClients(Status.PLATINUM, 1);
+    List<Client> goldClients = clientSupportService.generateAndStoreClients(Status.GOLD, 3);
+    List<Client> silverClients = clientSupportService.generateAndStoreClients(Status.SILVER, 2);
+    List<Client> noneClients = clientSupportService.generateAndStoreClients(Status.NONE, 6);
 
-        List<Client> clients = new ArrayList<>();
+    List<Client> clients = new ArrayList<>();
 
-        clients.addAll(platinumClients);
-        clients.addAll(goldClients);
-        clients.addAll(silverClients);
-        clients.addAll(noneClients);
+    clients.addAll(platinumClients);
+    clients.addAll(goldClients);
+    clients.addAll(silverClients);
+    clients.addAll(noneClients);
 
-        for (Client client : clients)
-        {
-            flightService.buyTicket(client.getId(), flightId);
-        }
-
-        flight = flightService.findById(flightId);
+    for (Client client : clients) {
+      flightService.buyTicket(client.getId(), flightId);
     }
 
-    @AfterEach
-    public void cleanDB()
-    {
+    flight = flightService.findById(flightId);
+  }
 
-        ticketRepository.deleteAll();
+  @AfterEach
+  public void cleanDB() {
 
-        clientSupportService.deleteAllGeneratedClients();
+    ticketRepository.deleteAll();
 
-        flight.setTicketsBought(new ArrayList<>());
-    }
+    clientSupportService.deleteAllGeneratedClients();
 
-    @Test
-    public void flightsShouldBeGeneratedTest()
-    {
-        List<Flight> flights = flightService.getAllAvailableFlights();
+    flight.setTicketsBought(new ArrayList<>());
+  }
 
-        assertTrue("--> flightsShouldBeGeneratedTest", flights.size() > 0);
-    }
+  @Test
+  public void flightsShouldBeGeneratedTest() {
+    List<Flight> flights = flightService.getAllAvailableFlights();
 
-    @Test
-    public void buyTicketTest1()
-    {
-        Client client = clientService.findAll().get(0);
+    assertTrue("--> flightsShouldBeGeneratedTest", flights.size() > 0);
+  }
 
-        Ticket ticket = flightService.buyTicket(client.getId(), flight.getId());
+  @Test
+  public void buyTicketTest1() {
+    Client client = clientService.findAll().get(0);
 
-        assertNotNull("--> ticket should be stored and contain id ", ticket.getId());
-    }
+    Ticket ticket = flightService.buyTicket(client.getId(), flight.getId());
 
-    @Test
-    public void buyTicketTest2()
-    {
-        Client client = clientService.findAll().get(0);
+    assertNotNull("--> ticket should be stored and contain id ", ticket.getId());
+  }
 
-        Ticket ticket = flightService.buyTicket(client.getId(), flight.getId());
+  @Test
+  public void buyTicketTest2() {
+    Client client = clientService.findAll().get(0);
 
-        flight = flightService.findById(flight.getId());
+    Ticket ticket = flightService.buyTicket(client.getId(), flight.getId());
 
-        System.out.println("--> " + flight.getTicketsBought().size());
-        assertTrue("--> flight should contain stored ticket ", flight.getTicketsBought().contains(ticket));
-    }
+    flight = flightService.findById(flight.getId());
 
-    @Test
-    public void getAvailableFlightsToTest1()
-    {
-        String city = "Kiev";
-        int expectedFlightsCount = 2;
+    System.out.println("--> " + flight.getTicketsBought().size());
+    assertTrue("--> flight should contain stored ticket ", flight.getTicketsBought().contains(ticket));
+  }
 
-        List<Flight> availableFlights = flightService.getAvailableFlightsTo(city);
+  @Test
+  public void getAvailableFlightsToTest1() {
+    String city = "Kiev";
+    int expectedFlightsCount = 2;
 
-        assertEquals("should be " + expectedFlightsCount + " available flights to " + city,
-                expectedFlightsCount, availableFlights.size());
-    }
+    List<Flight> availableFlights = flightService.getAvailableFlightsTo(city);
 
-    @Test
-    public void getAvailableFlightsFromTest()
-    {
-        String city = "Kiev";
-        int expectedFlightsCount = 2;
+    assertEquals("should be " + expectedFlightsCount + " available flights to " + city,
+        expectedFlightsCount, availableFlights.size());
+  }
 
-        List<Flight> availableFlights = flightService.getAvailableFlightsFrom(city);
+  @Test
+  public void getAvailableFlightsFromTest() {
+    String city = "Kiev";
+    int expectedFlightsCount = 2;
 
-        assertEquals("should be " + expectedFlightsCount + " available flights from " + city,
-                expectedFlightsCount, availableFlights.size());
-    }
+    List<Flight> availableFlights = flightService.getAvailableFlightsFrom(city);
 
-    @Test
-    public void getAvailableFlightsTest()
-    {
-        String from = "Kiev";
-        String to = "London";
-        int expectedFlightsCount = 1;
+    assertEquals("should be " + expectedFlightsCount + " available flights from " + city,
+        expectedFlightsCount, availableFlights.size());
+  }
 
-        List<Flight> availableFlights = flightService.getAvailableFlights(from, to);
+  @Test
+  public void getAvailableFlightsTest() {
+    String from = "Kiev";
+    String to = "London";
+    int expectedFlightsCount = 1;
 
-        assertEquals("should be " + expectedFlightsCount + " available flights from " + from + " to " + to,
-                expectedFlightsCount, availableFlights.size());
+    List<Flight> availableFlights = flightService.getAvailableFlights(from, to);
 
-    }
+    assertEquals("should be " + expectedFlightsCount + " available flights from " + from + " to " + to,
+        expectedFlightsCount, availableFlights.size());
 
-    @Test
-    public void getPassengersWithTest1()
-    {
-        List<Client> passengers = flightService.getPassengersWith(flight, Status.PLATINUM);
+  }
 
-        int expectedPlatinumPassengersCount = 1;
+  @Test
+  public void getPassengersWithTest1() {
+    List<Client> passengers = flightService.getPassengersWith(flight, Status.PLATINUM);
 
-        assertEquals("should be " + expectedPlatinumPassengersCount + " PLATINUM passengers",
-                expectedPlatinumPassengersCount, passengers.size());
-    }
+    int expectedPlatinumPassengersCount = 1;
 
-    @Test
-    public void getPassengersWithTest2()
-    {
-        List<Client> passengers = flightService.getPassengersWith(flight, Status.GOLD);
+    assertEquals("should be " + expectedPlatinumPassengersCount + " PLATINUM passengers",
+        expectedPlatinumPassengersCount, passengers.size());
+  }
 
-        int expectedGoldPassengersCount = 3;
+  @Test
+  public void getPassengersWithTest2() {
+    List<Client> passengers = flightService.getPassengersWith(flight, Status.GOLD);
 
-        assertEquals("should be " + expectedGoldPassengersCount + " GOLD passengers",
-                expectedGoldPassengersCount, passengers.size());
-    }
+    int expectedGoldPassengersCount = 3;
 
-    @Test
-    public void getPassengersWithTest3()
-    {
-        List<Client> passengers = flightService.getPassengersWith(flight, Status.SILVER);
+    assertEquals("should be " + expectedGoldPassengersCount + " GOLD passengers",
+        expectedGoldPassengersCount, passengers.size());
+  }
 
-        int expectedSilverPassengersCount = 2;
+  @Test
+  public void getPassengersWithTest3() {
+    List<Client> passengers = flightService.getPassengersWith(flight, Status.SILVER);
 
-        assertEquals("should be " + expectedSilverPassengersCount + " SILVER passengers",
-                expectedSilverPassengersCount, passengers.size());
-    }
+    int expectedSilverPassengersCount = 2;
 
-    @Test
-    public void getPassengersWithTest4()
-    {
-        List<Client> passengers = flightService.getPassengersWith(flight, Status.NONE);
+    assertEquals("should be " + expectedSilverPassengersCount + " SILVER passengers",
+        expectedSilverPassengersCount, passengers.size());
+  }
 
-        int expectedNoneStatusPassengersCount = 6;
+  @Test
+  public void getPassengersWithTest4() {
+    List<Client> passengers = flightService.getPassengersWith(flight, Status.NONE);
 
-        assertEquals("should be " + expectedNoneStatusPassengersCount + " NONE status passengers",
-                expectedNoneStatusPassengersCount, passengers.size());
-    }
+    int expectedNoneStatusPassengersCount = 6;
 
-    @Test
-    public void getPassengersGroupedByStatusTest1()
-    {
-        Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
+    assertEquals("should be " + expectedNoneStatusPassengersCount + " NONE status passengers",
+        expectedNoneStatusPassengersCount, passengers.size());
+  }
 
-        int expectedPlatinumPassengersCount = 1;
+  @Test
+  public void getPassengersGroupedByStatusTest1() {
+    Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
 
-        assertEquals("should be " + expectedPlatinumPassengersCount + " PLATINUM passengers",
-                expectedPlatinumPassengersCount, passengersByStatus.get(Status.PLATINUM).size());
-    }
+    int expectedPlatinumPassengersCount = 1;
 
-    @Test
-    public void getPassengersGroupedByStatusTest2()
-    {
-        Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
+    assertEquals("should be " + expectedPlatinumPassengersCount + " PLATINUM passengers",
+        expectedPlatinumPassengersCount, passengersByStatus.get(Status.PLATINUM).size());
+  }
 
-        int expectedGoldPassengersCount = 3;
+  @Test
+  public void getPassengersGroupedByStatusTest2() {
+    Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
 
-        assertEquals("should be " + expectedGoldPassengersCount + " GOLD passengers",
-                expectedGoldPassengersCount, passengersByStatus.get(Status.GOLD).size());
-    }
+    int expectedGoldPassengersCount = 3;
 
-    @Test
-    public void getPassengersGroupedByStatusTest3()
-    {
-        Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
+    assertEquals("should be " + expectedGoldPassengersCount + " GOLD passengers",
+        expectedGoldPassengersCount, passengersByStatus.get(Status.GOLD).size());
+  }
 
-        int expectedSilverPassengersCount = 2;
+  @Test
+  public void getPassengersGroupedByStatusTest3() {
+    Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
 
-        assertEquals("should be " + expectedSilverPassengersCount + " SILVER passengers",
-                expectedSilverPassengersCount, passengersByStatus.get(Status.SILVER).size());
-    }
+    int expectedSilverPassengersCount = 2;
 
-    @Test
-    public void getPassengersGroupedByStatusTest4()
-    {
-        Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
+    assertEquals("should be " + expectedSilverPassengersCount + " SILVER passengers",
+        expectedSilverPassengersCount, passengersByStatus.get(Status.SILVER).size());
+  }
 
-        int expectedNoneStatusPassengersCount = 6;
+  @Test
+  public void getPassengersGroupedByStatusTest4() {
+    Map<Status, Set<Client>> passengersByStatus = flightService.getPassengersGroupedByStatus(flight);
 
-        assertEquals("should be " + expectedNoneStatusPassengersCount + " NONE passengers",
-                expectedNoneStatusPassengersCount, passengersByStatus.get(Status.NONE).size());
-    }
+    int expectedNoneStatusPassengersCount = 6;
+
+    assertEquals("should be " + expectedNoneStatusPassengersCount + " NONE passengers",
+        expectedNoneStatusPassengersCount, passengersByStatus.get(Status.NONE).size());
+  }
 
 }

@@ -10,10 +10,11 @@ import com.luxoft.j8airport.domain.Status;
 import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.tickets.TicketRepository;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.NonFinal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,19 +26,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PersonalDiscountServiceTests {
 
-  final ClientSupportService clientSupportService;
+  ClientSupportService clientSupportService;
 
-  final DiscountService discountService;
+  DiscountService discountService;
+
+  @NonFinal
+  Map<Status, Client> clientMap = new EnumMap<>(Status.class);
 
   @Mock
+  @NonFinal
   TicketRepository ticketRepositoryMock;
-
-  private Map<Status, Client> clientMap;
 
   @BeforeEach
   public void setup() {
-    clientMap = new HashMap<>(4);
-
     clientMap.put(Status.NONE, clientSupportService.generateAndStoreClients(Status.NONE, 1).get(0));
     clientMap.put(Status.SILVER, clientSupportService.generateAndStoreClients(Status.SILVER, 1).get(0));
     clientMap.put(Status.GOLD, clientSupportService.generateAndStoreClients(Status.GOLD, 1).get(0));
@@ -45,7 +46,7 @@ public class PersonalDiscountServiceTests {
 
     ticketRepositoryMock = mock(TicketRepository.class);
 
-    List<Ticket> noPrice = Arrays.asList(new Ticket[]{new Ticket()});
+    List<Ticket> noPrice = Arrays.asList(new Ticket());
 
     Ticket silverPlus = mock(Ticket.class);
     when(silverPlus.getPrice()).thenReturn(Status.SILVER.getMoneySpentLimit() + 1.0);
@@ -60,13 +61,13 @@ public class PersonalDiscountServiceTests {
     when(ticketRepositoryMock.findAllByClient(clientMap.get(Status.NONE))).thenReturn(noPrice);
 
     when(ticketRepositoryMock.findAllByClient(clientMap.get(Status.SILVER)))
-        .thenReturn(Arrays.asList(new Ticket[]{silverPlus}));
+        .thenReturn(Arrays.asList(silverPlus));
 
     when(ticketRepositoryMock.findAllByClient(clientMap.get(Status.GOLD)))
-        .thenReturn(Arrays.asList(new Ticket[]{goldPlus}));
+        .thenReturn(Arrays.asList(goldPlus));
 
     when(ticketRepositoryMock.findAllByClient(clientMap.get(Status.PLATINUM)))
-        .thenReturn(Arrays.asList(new Ticket[]{platinumPlus}));
+        .thenReturn(Arrays.asList(platinumPlus));
 
     discountService.setTicketRepository(ticketRepositoryMock);
   }

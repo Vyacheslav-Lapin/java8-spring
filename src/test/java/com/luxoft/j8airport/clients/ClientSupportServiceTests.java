@@ -15,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ClientSupportServiceTests {
 
-  final ClientSupportService clientSupportService;
+  ClientSupportService clientSupportService;
 
-  final ClientService clientService;
+  ClientService clientService;
 
   @Test
   public void generateAndStoreClientTest() {

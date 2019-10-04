@@ -14,6 +14,7 @@ import com.luxoft.j8airport.domain.Ticket;
 import com.luxoft.j8airport.flights.FlightService;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.NonFinal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,18 +23,18 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class TicketServiceTests {
-  final TicketService ticketService;
+  TicketService ticketService;
 
-  final TicketRepository ticketRepository;
-  final ClientService clientService;
-  final ClientSupportService clientSupportService;
-  final FlightService flightService;
+  TicketRepository ticketRepository;
+  ClientService clientService;
+  ClientSupportService clientSupportService;
+  FlightService flightService;
 
   @Mock
+  @NonFinal
   TicketRepository ticketRepositoryMock;
 
   @BeforeEach

@@ -4,6 +4,7 @@ import com.luxoft.j8airport.clients.ClientService;
 import com.luxoft.j8airport.domain.Flight;
 import com.luxoft.j8airport.domain.Ticket;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/flights")
 public class FlightsController {
 
-  @Autowired
   FlightService flightService;
 
-  @Autowired
   ClientService clientService;
 
   @GetMapping
@@ -31,7 +31,8 @@ public class FlightsController {
   }
 
   @GetMapping("buyTicket")
-  public Ticket buyTicket(@RequestParam Long clientId, @RequestParam Long flightId) {
+  public Ticket buyTicket(@RequestParam Long clientId,
+                          @RequestParam Long flightId) {
     return null;
   }
 }

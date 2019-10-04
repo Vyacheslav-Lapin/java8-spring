@@ -1,18 +1,17 @@
 package com.luxoft.j8airport.domain;
 
-public enum Status
-{
-    PLATINUM(100000), GOLD(10000), SILVER(5000), NONE(0);
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    int moneySpentLimit;
+@Getter
+@AllArgsConstructor
+public enum Status {
+  PLATINUM(100000),
+  GOLD(10000),
+  SILVER(5000),
+  NONE(0);
 
-    Status(int moneySpentLimit)
-    {
-        this.moneySpentLimit = moneySpentLimit;
-    }
+  int moneySpentLimit;
 
-    public int getMoneySpentLimit()
-    {
-        return moneySpentLimit;
-    }
 }
